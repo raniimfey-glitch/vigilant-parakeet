@@ -1,0 +1,4540 @@
+<!--
+========================================================================
+Project Name : التعليم الممتع | Fun Learning
+Version      : تعلم الحروف العربية
+Developer    : Samira Abdessadok "رنيم فاي" | سميرة عبد الصّدوق
+Date         : جوان 2026
+
+Copyright (c) 2026 Samira Abdessadok "رنيم فاي". All Rights Reserved.
+جميع الحقوق محفوظة © 2026 سميرة عبد الصّدوق "رنيم فاي".
+
+NOTICE: This software is the exclusive intellectual property of
+Samira Abdessadok "رنيم فاي". Unauthorized reproduction, distribution,
+modification, or use of this code, in whole or in part, is strictly
+prohibited without prior written consent from the owner.
+
+تنبيه: هذا البرنامج هو ملكية فكرية حصرية لسميرة عبد الصّدوق "رنيم فاي".
+يمنع منعاً باتاً نسخ أو توزيع أو تعديل أو استخدام هذا الكود،
+كلياً أو جزئياً، دون الحصول على إذن خطي مسبق من صاحبة الحقوق.
+
+ACKNOWLEDGMENT: Developed and designed by Samira Abdessadok (Raniim Fey),
+utilizing Artificial Intelligence tools as an assistive technology in
+coding and data structuring, while retaining full intellectual property
+rights and editorial oversight.
+إقرار: تمّ التّطوير والتّصميم بواسطة سميرة عبد الصّدوق (رنيم فاي)،
+مع الاستعانة بأدوات الذّكاء الاصطناعي كتقنية مساعدة في البرمجة
+وهيكلة البيانات، مع الاحتفاظ الكامل بكافة حقوق الملكيّة الفكريّة
+والإشراف التّحريري.
+========================================================================
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!--
+        مشروع: التّعلُّم المُمتِع - v6 (النظام الديناميكي الكامل)
+        المبتكرة: سميرة عبد الصدوق "رنيم فاي"
+        جميع الحقوق محفوظة 2026
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التّعلُّم المُمتِع - تعلّم الحروف</title>
+    <style>
+        :root {
+            --bg:     #F5F0E8;
+            --card:   #FFFDF8;
+            --dark:   #2B2420;
+            --mid:    #5C4A3A;
+            --accent: #B05C2B;
+            --green:  #3A7D44;
+            --blue:   #2B5F8E;
+            --teal:   #1E7A6E;
+            --purple: #6B3FA0;
+            --gold:   #C8922A;
+            --shadow: rgba(43,36,32,0.12);
+            --border: #D4C4B0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        /* ===== شاشة الاختيار ===== */
+        #screen-select {
+            background: var(--card);
+            border-radius: 28px;
+            box-shadow: 0 8px 32px var(--shadow);
+            max-width: 520px;
+            width: 100%;
+            padding: 28px 20px;
+            border: 2px solid var(--border);
+        }
+        .select-header { text-align: center; margin-bottom: 22px; }
+        .select-title  { font-size: 24px; color: var(--accent); font-weight: bold; margin-bottom: 5px; }
+        .select-sub    { font-size: 16px; color: var(--mid); }
+        .huroof-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .harf-btn {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 12px 6px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+        .harf-btn:active { transform: scale(0.94); }
+        .harf-btn.done   { background: #E8F5EC; border-color: var(--green); }
+        .harf-btn-char   { font-size: 40px; font-weight: bold; color: var(--dark); line-height: 1.2; }
+        .harf-btn-name   { font-size: 11px; color: var(--mid); margin-top: 3px; }
+        .harf-btn-check  { font-size: 14px; color: var(--green); margin-top: 2px; }
+        .select-footer   { text-align: center; font-size: 12px; color: #A08C78; margin-top: 6px; }
+
+        /* ===== شاشة الدرس ===== */
+        #screen-lesson { display: none; max-width: 520px; width: 100%; }
+        .card {
+            background: var(--card);
+            border-radius: 28px;
+            box-shadow: 0 8px 32px var(--shadow);
+            width: 100%;
+            padding: 24px 20px;
+            border: 2px solid var(--border);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            position: relative;
+        }
+        .back-btn {
+            position: absolute; right: 0; top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 4px 10px;
+            font-size: 13px; color: var(--mid);
+            cursor: pointer; font-family: inherit; font-weight: 600;
+        }
+        .app-title    { font-size: 17px; color: var(--mid); font-weight: 600; margin-bottom: 4px; }
+        .lesson-badge {
+            display: inline-block; background: var(--accent);
+            color: white; font-size: 15px; font-weight: bold;
+            padding: 4px 14px; border-radius: 14px;
+        }
+        .progress-section { margin-bottom: 12px; }
+        .progress-label {
+            display: flex; justify-content: space-between;
+            font-size: 15px; color: var(--mid);
+            margin-bottom: 5px; font-weight: 600;
+        }
+        .progress-bar-bg { background: var(--border); border-radius: 8px; height: 13px; overflow: hidden; }
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--gold), var(--accent));
+            height: 100%; border-radius: 8px; transition: width 0.5s ease;
+        }
+        .stage-type {
+            text-align: center; font-size: 19px; color: var(--accent);
+            font-weight: bold; margin-bottom: 8px; min-height: 26px;
+        }
+
+        /* ===== منطقة الحرف ===== */
+        .display-area {
+            display: flex; align-items: center;
+            justify-content: center; gap: 10px;
+            margin-bottom: 10px; min-height: 130px;
+        }
+        .char-box { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .char-display {
+            font-size: 96px; color: var(--dark);
+            font-weight: bold; line-height: 1.1;
+            text-shadow: 2px 3px 8px var(--shadow);
+        }
+        .char-label {
+            font-size: 12px; color: var(--mid); font-weight: 600;
+            background: #EEE8DF; padding: 2px 8px;
+            border-radius: 8px; text-align: center;
+        }
+        .arrow { font-size: 26px; color: var(--border); display: none; }
+        .arrow.show { display: block; }
+        /* مربع الشكل في الموضع (أخضر للموضع، تيل للصوت) */
+        .pos-box  { display: none; flex-direction: column; align-items: center; gap: 4px; }
+        .pos-box.show { display: flex; }
+        .pos-char {
+            font-size: 96px; font-weight: bold; line-height: 1.1;
+            text-shadow: 2px 3px 8px var(--shadow);
+        }
+        .pos-char.color-pos   { color: var(--green); }
+        .pos-char.color-sound { color: var(--teal); }
+        .pos-label {
+            font-size: 12px; font-weight: 600;
+            padding: 2px 8px; border-radius: 8px; text-align: center;
+        }
+        .pos-label.color-pos   { color: var(--green);  background: #E8F5EC; }
+        .pos-label.color-sound { color: var(--teal);   background: #E0F2F0; }
+
+        /* ===== الكلمة ===== */
+        .word-display {
+            text-align: center; font-size: 46px; font-weight: bold;
+            color: var(--blue); min-height: 64px; margin-bottom: 14px;
+            display: flex; align-items: center; justify-content: center;
+            background: #EEF4FA; border-radius: 14px;
+            padding: 8px 14px; border: 2px solid #C0D8EE;
+        }
+        .hl       { color: var(--accent); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 5px; }
+        .hl-sound { color: var(--teal);   text-decoration: underline; text-decoration-color: var(--teal);   text-underline-offset: 5px; }
+
+        /* ===== الأزرار ===== */
+        .buttons-grid { display: flex; flex-direction: column; gap: 8px; }
+        .btn {
+            width: 100%; padding: 14px 16px; font-size: 18px; font-weight: bold;
+            border: none; border-radius: 14px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.12s, opacity 0.3s;
+            box-shadow: 0 4px 12px var(--shadow);
+            color: white; font-family: inherit;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-listen { background: var(--blue); }
+        .btn-erase  { background: var(--accent); }
+        .btn-sound  { background: var(--teal); }
+        .btn-erase2 { background: var(--purple); }
+        .btn-speak  { background: #7B5B3A; }
+        .nav-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-prev { background: var(--mid); }
+        .btn-next { background: var(--green); }
+        .btn-locked { opacity: 0.30; pointer-events: none; }
+        .btn-hidden { display: none !important; }
+        .step-num {
+            background: rgba(255,255,255,0.25); border-radius: 50%;
+            width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: bold; flex-shrink: 0;
+        }
+        .encourage {
+            text-align: center; font-size: 17px; color: var(--green);
+            font-weight: bold; min-height: 22px; margin-top: 10px;
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .encourage.show { opacity: 1; }
+        .footer { margin-top: 14px; text-align: center; font-size: 12px; color: #A08C78; }
+    </style>
+</head>
+<body>
+
+<!-- شاشة الاختيار -->
+<div id="screen-select">
+    <div class="select-header">
+        <div class="select-title">مَشْرُوعُ التَّعَلُّمِ الْمُمْتِعِ</div>
+        <div class="select-sub">اخْتَرِ الْحَرْفَ الَّذِي تُرِيدُ تَعَلُّمَهُ</div>
+    </div>
+    <div class="huroof-grid" id="huroof-grid"></div>
+    <div class="select-footer">رنيم فاي &middot; سميرة عبد الصدوق &copy; 2026</div>
+</div>
+
+<!-- شاشة الدرس -->
+<div id="screen-lesson">
+<div class="card">
+    <div class="header">
+        <button class="back-btn" onclick="goBack()">&#8594; الحروف</button>
+        <div class="app-title">مَشْرُوعُ التَّعَلُّمِ الْمُمْتِعِ</div>
+        <div class="lesson-badge" id="lesson-badge"></div>
+    </div>
+    <div class="progress-section">
+        <div class="progress-label">
+            <span id="step-label"></span>
+            <span id="step-pct"></span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+    </div>
+    <div class="stage-type" id="stage-type"></div>
+    <div class="display-area">
+        <div class="char-box">
+            <div class="char-display" id="char-display"></div>
+            <div class="char-label"  id="char-label">الْحَرْفُ</div>
+        </div>
+        <div class="arrow" id="arrow">&#8592;</div>
+        <div class="pos-box" id="pos-box">
+            <div class="pos-char"  id="pos-char"></div>
+            <div class="pos-label" id="pos-label"></div>
+        </div>
+    </div>
+    <div class="word-display" id="word-display"></div>
+    <div class="buttons-grid">
+        <button class="btn btn-listen" id="btn1" onclick="do1()">
+            <span class="step-num">١</span> &#128266; اسْمَعِ الْكَلِمَةَ
+        </button>
+        <button class="btn btn-erase btn-locked" id="btn2" onclick="do2()">
+            <span class="step-num">٢</span> &#128269; أَيْنَ الْحَرْفُ فِي الْكَلِمَةِ؟
+        </button>
+        <button class="btn btn-sound btn-locked btn-hidden" id="btn3" onclick="do3()">
+            <span class="step-num">٣</span> &#127925; اسْمَعِ الصَّوْتَ
+        </button>
+        <button class="btn btn-erase2 btn-locked btn-hidden" id="btn4" onclick="do4()">
+            <span class="step-num">٤</span> &#128270; أَيْنَ الْحَرْفُ مُشَكَّلاً؟
+        </button>
+        <button class="btn btn-speak btn-locked btn-hidden" id="btn5" onclick="do5()">
+            <span class="step-num">٥</span> &#127908; انْطِقِ الْحَرْفَ
+        </button>
+        <div class="nav-row">
+            <button class="btn btn-prev" onclick="stageGo(-1)">&#9664; السَّابِق</button>
+            <button class="btn btn-next" onclick="stageGo(+1)">التَّالِي &#9654;</button>
+        </div>
+    </div>
+    <div class="encourage" id="encourage"></div>
+</div>
+<div class="footer">رنيم فاي &middot; سميرة عبد الصدوق &copy; 2026</div>
+</div>
+
+<script>
+var DB = {
+  "huroof": [
+    {
+      "id": 1,
+      "harf": "م",
+      "name": "الْمِيمُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "مَكْتَب",
+          "c": "م",
+          "cPos": "مـ",
+          "t": "م - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عَمَل",
+          "c": "م",
+          "cPos": "ـمـ",
+          "t": "م - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "قَلَم",
+          "c": "م",
+          "cPos": "ـم",
+          "t": "م - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "رَسَّام",
+          "c": "م",
+          "cPos": "م",
+          "t": "م - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَكْتَب",
+          "c": "م",
+          "cPos": "م",
+          "t": "مَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "مَ",
+          "soundChar": "مَ",
+          "soundLabel": "مَ - فَتْحَةٌ",
+          "speakText": "مَكْتَب. مَ. مَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "مَكْتَب - مَـ"
+        },
+        {
+          "w": "مُسْلِم",
+          "c": "م",
+          "cPos": "م",
+          "t": "مُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "مُ",
+          "soundChar": "مُ",
+          "soundLabel": "مُ - ضَمَّةٌ",
+          "speakText": "مُسْلِم. مُ. مُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "مُسْلِم - مُـ"
+        },
+        {
+          "w": "مِفْتَاح",
+          "c": "م",
+          "cPos": "م",
+          "t": "مِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "مِ",
+          "soundChar": "مِ",
+          "soundLabel": "مِ - كَسْرَةٌ",
+          "speakText": "مِفْتَاح. مِ. مِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "مِفْتَاح - مِـ"
+        },
+        {
+          "w": "مَاء",
+          "c": "م",
+          "cPos": "م",
+          "t": "مَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "ما",
+          "soundChar": "مَا",
+          "soundLabel": "مَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "مَاء. ما. ما فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "مَاء - مَا"
+        },
+        {
+          "w": "مِيلَاد",
+          "c": "م",
+          "cPos": "م",
+          "t": "مِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "مي",
+          "soundChar": "مِي",
+          "soundLabel": "مِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "مِيلَاد. مي. مي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "مِيلَاد - مِي"
+        },
+        {
+          "w": "عَمُود",
+          "c": "م",
+          "cPos": "م",
+          "t": "مُو - مَدٌّ بِالْوَاوِ",
+          "p": "middle",
+          "kind": "long_w",
+          "sound": "مو",
+          "soundChar": "مُو",
+          "soundLabel": "مُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "عَمُود. مو. مو فِي وَسَطِ الْكَلِمَةِ",
+          "speakLabel": "عَمُود - ـمُو"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "harf": "ب",
+      "name": "الْبَاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "بِرْكَة",
+          "c": "ب",
+          "cPos": "بـ",
+          "t": "ب - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "طَالِب",
+          "c": "ب",
+          "cPos": "ـب",
+          "t": "ب - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عِتَاب",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "ب - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "صَبَاح",
+          "c": "ب",
+          "cPos": "ـبـ",
+          "t": "ب - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَقَرَة",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "بَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "بَ",
+          "soundChar": "بَ",
+          "soundLabel": "بَ - فَتْحَةٌ",
+          "speakText": "بَقَرَة. بَ. بَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "بَقَرَة - بَـ"
+        },
+        {
+          "w": "بُنِّ",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "بُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "بُ",
+          "soundChar": "بُ",
+          "soundLabel": "بُ - ضَمَّةٌ",
+          "speakText": "بُنِّ. بُ. بُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "بُنِّ - بُـ"
+        },
+        {
+          "w": "بِئْر",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "بِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "بِ",
+          "soundChar": "بِ",
+          "soundLabel": "بِ - كَسْرَةٌ",
+          "speakText": "بِئْر. بِ. بِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "بِئْر - بِـ"
+        },
+        {
+          "w": "بَاب",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "بَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "با",
+          "soundChar": "بَا",
+          "soundLabel": "بَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "بَاب. با. با فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "بَاب - بَا"
+        },
+        {
+          "w": "بِيت",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "بِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "بي",
+          "soundChar": "بِي",
+          "soundLabel": "بِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "بِيت. بي. بي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "بِيت - بِي"
+        },
+        {
+          "w": "بُوق",
+          "c": "ب",
+          "cPos": "ب",
+          "t": "بُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "بو",
+          "soundChar": "بُو",
+          "soundLabel": "بُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "بُوق. بو. بو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "بُوق - بُو"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "harf": "د",
+      "name": "الدَّالُ",
+      "connects": false,
+      "stages": [
+        {
+          "w": "دَجَاجَة",
+          "c": "د",
+          "cPos": "د",
+          "t": "د - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "يَد",
+          "c": "د",
+          "cPos": "ـد",
+          "t": "د - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عُود",
+          "c": "د",
+          "cPos": "د",
+          "t": "د - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "دَرَجَة",
+          "c": "د",
+          "cPos": "د",
+          "t": "دَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "دَ",
+          "soundChar": "دَ",
+          "soundLabel": "دَ - فَتْحَةٌ",
+          "speakText": "دَرَجَة. دَ. دَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "دَرَجَة - دَـ"
+        },
+        {
+          "w": "دُبّ",
+          "c": "د",
+          "cPos": "د",
+          "t": "دُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "دُ",
+          "soundChar": "دُ",
+          "soundLabel": "دُ - ضَمَّةٌ",
+          "speakText": "دُبّ. دُ. دُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "دُبّ - دُـ"
+        },
+        {
+          "w": "عَادِل",
+          "c": "د",
+          "cPos": "د",
+          "t": "دِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "دِ",
+          "soundChar": "دِ",
+          "soundLabel": "دِ - كَسْرَةٌ",
+          "speakText": "دِفْتَر. دِ. دِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "دِفْتَر - دِـ"
+        },
+        {
+          "w": "دَار",
+          "c": "د",
+          "cPos": "د",
+          "t": "دَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "دا",
+          "soundChar": "دَا",
+          "soundLabel": "دَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "دَار. دا. دا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "دَار - دَا"
+        },
+        {
+          "w": "دِيك",
+          "c": "د",
+          "cPos": "د",
+          "t": "دِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "دي",
+          "soundChar": "دِي",
+          "soundLabel": "دِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "دِيك. دي. دي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "دِيك - دِي"
+        },
+        {
+          "w": "دُود",
+          "c": "د",
+          "cPos": "د",
+          "t": "دُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "دو",
+          "soundChar": "دُو",
+          "soundLabel": "دُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "دُود. دو. دو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "دُود - دُو"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "harf": "ل",
+      "name": "اللَّامُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "لَيْمُون",
+          "c": "ل",
+          "cPos": "لـ",
+          "t": "ل - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عَسَل",
+          "c": "ل",
+          "cPos": "ـل",
+          "t": "ل - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "قَلَم",
+          "c": "ل",
+          "cPos": "ـلـ",
+          "t": "ل - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عَدْل",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "ل - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "لَبَن",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "لَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "لَ",
+          "soundChar": "لَ",
+          "soundLabel": "لَ - فَتْحَةٌ",
+          "speakText": "لَبَن. لَ. لَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "لَبَن - لَـ"
+        },
+        {
+          "w": "لُغَز",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "لُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "لُ",
+          "soundChar": "لُ",
+          "soundLabel": "لُ - ضَمَّةٌ",
+          "speakText": "لُغَز. لُ. لُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "لُغَز - لُـ"
+        },
+        {
+          "w": "لِسَان",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "لِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "لِ",
+          "soundChar": "لِ",
+          "soundLabel": "لِ - كَسْرَةٌ",
+          "speakText": "لِسَان. لِ. لِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "لِسَان - لِـ"
+        },
+        {
+          "w": "لَاعِب",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "لَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "لا",
+          "soundChar": "لَا",
+          "soundLabel": "لَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "لَاعِب. لا. لا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "لَاعِب - لَا"
+        },
+        {
+          "w": "أَلِيف",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "لِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "لي",
+          "soundChar": "لِي",
+          "soundLabel": "لِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "لِيف. لي. لي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "لِيف - لِي"
+        },
+        {
+          "w": "قُلُوب",
+          "c": "ل",
+          "cPos": "ل",
+          "t": "لُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "لو",
+          "soundChar": "لُو",
+          "soundLabel": "لُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "لُون. لو. لو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "لُون - لُو"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "harf": "ر",
+      "name": "الرَّاءُ",
+      "connects": false,
+      "stages": [
+        {
+          "w": "رَأْس",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "ر - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَمِر",
+          "c": "ر",
+          "cPos": "ـر",
+          "t": "ر - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَار",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "ر - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "رَجُل",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "رَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "رَ",
+          "soundChar": "رَ",
+          "soundLabel": "رَ - فَتْحَةٌ",
+          "speakText": "رَجُل. رَ. رَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "رَجُل - رَـ"
+        },
+        {
+          "w": "رُمَّان",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "رُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "رُ",
+          "soundChar": "رُ",
+          "soundLabel": "رُ - ضَمَّةٌ",
+          "speakText": "رُمَّان. رُ. رُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "رُمَّان - رُـ"
+        },
+        {
+          "w": "رِمَاح",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "رِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "رِ",
+          "soundChar": "رِ",
+          "soundLabel": "رِ - كَسْرَةٌ",
+          "speakText": "رِمَاح. رِ. رِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "رِمَاح - رِـ"
+        },
+        {
+          "w": "رَاحَة",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "رَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "را",
+          "soundChar": "رَا",
+          "soundLabel": "رَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "رَاحَة. را. را فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "رَاحَة - رَا"
+        },
+        {
+          "w": "رِيح",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "رِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "ري",
+          "soundChar": "رِي",
+          "soundLabel": "رِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "رِيح. ري. ري فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "رِيح - رِي"
+        },
+        {
+          "w": "رُوح",
+          "c": "ر",
+          "cPos": "ر",
+          "t": "رُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "رو",
+          "soundChar": "رُو",
+          "soundLabel": "رُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "رُوح. رو. رو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "رُوح - رُو"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "harf": "و",
+      "name": "الْوَاوُ",
+      "connects": false,
+      "stages": [
+        {
+          "w": "وَرْدَة",
+          "c": "و",
+          "cPos": "و",
+          "t": "و - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "دَلْو",
+          "c": "و",
+          "cPos": "ـو",
+          "t": "و - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "جَرْو",
+          "c": "و",
+          "cPos": "و",
+          "t": "و - آخِرُ الْكَلِمَةِ مُنْفَصِلاً (إِضَافِي)",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَخَوَات",
+          "c": "و",
+          "cPos": "ـوـ",
+          "t": "و - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "وَطَن",
+          "c": "و",
+          "cPos": "و",
+          "t": "وَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "وَ",
+          "soundChar": "وَ",
+          "soundLabel": "وَ - فَتْحَةٌ",
+          "speakText": "وَطَن. وَ. وَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "وَطَن - وَـ"
+        },
+        {
+          "w": "وُجُوه",
+          "c": "و",
+          "cPos": "و",
+          "t": "وُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "وُ",
+          "soundChar": "وُ",
+          "soundLabel": "وُ - ضَمَّةٌ",
+          "speakText": "وُجُوه. وُ. وُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "وُجُوه - وُـ"
+        },
+        {
+          "w": "وِسَادَة",
+          "c": "و",
+          "cPos": "و",
+          "t": "وِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "وِ",
+          "soundChar": "وِ",
+          "soundLabel": "وِ - كَسْرَةٌ",
+          "speakText": "وِسَادَة. وِ. وِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "وِسَادَة - وِـ"
+        },
+        {
+          "w": "وَادِي",
+          "c": "و",
+          "cPos": "و",
+          "t": "وَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "وا",
+          "soundChar": "وَا",
+          "soundLabel": "وَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "وَادِي. وا. وا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "وَادِي - وَا"
+        },
+        {
+          "w": "طَوِيل",
+          "c": "و",
+          "cPos": "ـوـ",
+          "t": "وِي - مَدٌّ بِالْيَاءِ",
+          "p": "middle",
+          "kind": "long_y",
+          "sound": "وي",
+          "soundChar": "وِي",
+          "soundLabel": "وِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "طَوِيل. وي. وي فِي وَسَطِ الْكَلِمَةِ",
+          "speakLabel": "طَوِيل - ـوِيـ"
+        },
+        {
+          "w": "نُور",
+          "c": "و",
+          "cPos": "و",
+          "t": "نُو - مَدٌّ بِالْوَاوِ",
+          "p": "middle",
+          "kind": "long_w",
+          "sound": "نو",
+          "soundChar": "نُو",
+          "soundLabel": "نُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "نُور. نو. نو فِي وَسَطِ الْكَلِمَةِ",
+          "speakLabel": "نُور - ـنُو"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "harf": "ن",
+      "name": "النُّونُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "نَمْلَة",
+          "c": "ن",
+          "cPos": "نـ",
+          "t": "ن - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مِنْبَر",
+          "c": "ن",
+          "cPos": "ـنـ",
+          "t": "ن - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "لَبَن",
+          "c": "ن",
+          "cPos": "ـن",
+          "t": "ن - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَيْسَان",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "ن - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَهَار",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "نَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "نَ",
+          "soundChar": "نَ",
+          "soundLabel": "نَ - فَتْحَةٌ",
+          "speakText": "نَهَار. نَ. نَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "نَهَار - نَـ"
+        },
+        {
+          "w": "نُسُور",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "نُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "نُ",
+          "soundChar": "نُ",
+          "soundLabel": "نُ - ضَمَّةٌ",
+          "speakText": "نُسُور. نُ. نُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "نُسُور - نُـ"
+        },
+        {
+          "w": "نِسَاء",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "نِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "نِ",
+          "soundChar": "نِ",
+          "soundLabel": "نِ - كَسْرَةٌ",
+          "speakText": "نِسَاء. نِ. نِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "نِسَاء - نِـ"
+        },
+        {
+          "w": "نَار",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "نَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "نا",
+          "soundChar": "نَا",
+          "soundLabel": "نَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "نَار. نا. نا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "نَار - نَا"
+        },
+        {
+          "w": "نِيل",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "نِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "ني",
+          "soundChar": "نِي",
+          "soundLabel": "نِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "نِيل. ني. ني فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "نِيل - نِي"
+        },
+        {
+          "w": "نُور",
+          "c": "ن",
+          "cPos": "ن",
+          "t": "نُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "نو",
+          "soundChar": "نُو",
+          "soundLabel": "نُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "نُور. نو. نو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "نُور - نُو"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "harf": "ق",
+      "name": "الْقَافُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "قَلَم",
+          "c": "ق",
+          "cPos": "قـ",
+          "t": "ق - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عَقْرَب",
+          "c": "ق",
+          "cPos": "ـقـ",
+          "t": "ق - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "طَرِيق",
+          "c": "ق",
+          "cPos": "ـق",
+          "t": "ق - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "وَرَق",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "ق - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "قَمَر",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "قَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "قَ",
+          "soundChar": "قَ",
+          "soundLabel": "قَ - فَتْحَةٌ",
+          "speakText": "قَمَر. قَ. قَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "قَمَر - قَـ"
+        },
+        {
+          "w": "قُفْل",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "قُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "قُ",
+          "soundChar": "قُ",
+          "soundLabel": "قُ - ضَمَّةٌ",
+          "speakText": "قُفْل. قُ. قُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "قُفْل - قُـ"
+        },
+        {
+          "w": "قِطَار",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "قِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "قِ",
+          "soundChar": "قِ",
+          "soundLabel": "قِ - كَسْرَةٌ",
+          "speakText": "قِطَار. قِ. قِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "قِطَار - قِـ"
+        },
+        {
+          "w": "قَاعَة",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "قَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "قا",
+          "soundChar": "قَا",
+          "soundLabel": "قَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "قَاعَة. قا. قا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "قَاعَة - قَا"
+        },
+        {
+          "w": "قِيثَارَة",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "قِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "قي",
+          "soundChar": "قِي",
+          "soundLabel": "قِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "قِيثَارَة. قي. قي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "قِيثَارَة - قِي"
+        },
+        {
+          "w": "عُقُود",
+          "c": "ق",
+          "cPos": "ق",
+          "t": "قُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "قو",
+          "soundChar": "قُو",
+          "soundLabel": "قُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "قُوس. قو. قو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "قُوس - قُو"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "harf": "ت",
+      "name": "التَّاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "تُفَّاحَة",
+          "c": "ت",
+          "cPos": "تـ",
+          "t": "ت - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "كِتَاب",
+          "c": "ت",
+          "cPos": "ـتـ",
+          "t": "ت - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَيْت",
+          "c": "ت",
+          "cPos": "ـت",
+          "t": "ت - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "حُوت",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "ت - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "تَمْر",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "تَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "تَ",
+          "soundChar": "تَ",
+          "soundLabel": "تَ - فَتْحَةٌ",
+          "speakText": "تَمْر. تَ. تَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "تَمْر - تَـ"
+        },
+        {
+          "w": "تُفَّاح",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "تُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "تُ",
+          "soundChar": "تُ",
+          "soundLabel": "تُ - ضَمَّةٌ",
+          "speakText": "تُفَّاح. تُ. تُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "تُفَّاح - تُـ"
+        },
+        {
+          "w": "تِمْسَاح",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "تِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "تِ",
+          "soundChar": "تِ",
+          "soundLabel": "تِ - كَسْرَةٌ",
+          "speakText": "تِين. تِ. تِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "تِين - تِـ"
+        },
+        {
+          "w": "تَاجِر",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "تَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "تا",
+          "soundChar": "تَا",
+          "soundLabel": "تَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "تَاجِر. تا. تا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "تَاجِر - تَا"
+        },
+        {
+          "w": "عَبِير",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "تِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "تي",
+          "soundChar": "تِي",
+          "soundLabel": "تِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "عَبِير. تي. تي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عَبِير - تِي"
+        },
+        {
+          "w": "بِنْت",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "ت - آخِرُ الْكَلِمَةِ مُنْفَصِلاً (إِضَافِي)",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "تُوت",
+          "c": "ت",
+          "cPos": "ت",
+          "t": "تُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "تو",
+          "soundChar": "تُو",
+          "soundLabel": "تُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "تُوت. تو. تو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "تُوت - تُو"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "harf": "س",
+      "name": "السِّينُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "سَمَكَة",
+          "c": "س",
+          "cPos": "سـ",
+          "t": "س - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عَسَل",
+          "c": "س",
+          "cPos": "ـسـ",
+          "t": "س - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أُسْرَة",
+          "c": "س",
+          "cPos": "ـسـ",
+          "t": "س - وَسَطُ الْكَلِمَةِ مُنْفَصِل (إِضَافِي)",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "كِيس",
+          "c": "س",
+          "cPos": "ـس",
+          "t": "س - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "كُرَّاس",
+          "c": "س",
+          "cPos": "س",
+          "t": "س - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "سَحَاب",
+          "c": "س",
+          "cPos": "س",
+          "t": "سَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "سَ",
+          "soundChar": "سَ",
+          "soundLabel": "سَ - فَتْحَةٌ",
+          "speakText": "سَحَاب. سَ. سَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "سَحَاب - سَـ"
+        },
+        {
+          "w": "سُلَّم",
+          "c": "س",
+          "cPos": "س",
+          "t": "سُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "سُ",
+          "soundChar": "سُ",
+          "soundLabel": "سُ - ضَمَّةٌ",
+          "speakText": "سُلَّم. سُ. سُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "سُلَّم - سُـ"
+        },
+        {
+          "w": "سِكِّين",
+          "c": "س",
+          "cPos": "س",
+          "t": "سِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "سِ",
+          "soundChar": "سِ",
+          "soundLabel": "سِ - كَسْرَةٌ",
+          "speakText": "سِكِّين. سِ. سِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "سِكِّين - سِـ"
+        },
+        {
+          "w": "سَاعَة",
+          "c": "س",
+          "cPos": "س",
+          "t": "سَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "سا",
+          "soundChar": "سَا",
+          "soundLabel": "سَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "سَاعَة. سا. سا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "سَاعَة - سَا"
+        },
+        {
+          "w": "عَسِير",
+          "c": "س",
+          "cPos": "س",
+          "t": "سِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "سي",
+          "soundChar": "سِي",
+          "soundLabel": "سِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "سِيف. سي. سي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "سِيف - سِي"
+        },
+        {
+          "w": "سُور",
+          "c": "س",
+          "cPos": "س",
+          "t": "سُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "سو",
+          "soundChar": "سُو",
+          "soundLabel": "سُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "سُور. سو. سو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "سُور - سُو"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "harf": "ج",
+      "name": "الْجِيمُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "جَبَل",
+          "c": "ج",
+          "cPos": "جـ",
+          "t": "ج - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "شَجَرَة",
+          "c": "ج",
+          "cPos": "ـجـ",
+          "t": "ج - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "ثَلْج",
+          "c": "ج",
+          "cPos": "ـج",
+          "t": "ج - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بُرُوج",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "ج - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "جَبَل",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "جَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "جَ",
+          "soundChar": "جَ",
+          "soundLabel": "جَ - فَتْحَةٌ",
+          "speakText": "جَبَل. جَ. جَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "جَبَل - جَـ"
+        },
+        {
+          "w": "جُنْدِي",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "جُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "جُ",
+          "soundChar": "جُ",
+          "soundLabel": "جُ - ضَمَّةٌ",
+          "speakText": "جُنْدِي. جُ. جُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "جُنْدِي - جُـ"
+        },
+        {
+          "w": "جِسْر",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "جِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "جِ",
+          "soundChar": "جِ",
+          "soundLabel": "جِ - كَسْرَةٌ",
+          "speakText": "جِسْر. جِ. جِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "جِسْر - جِـ"
+        },
+        {
+          "w": "جَارَة",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "جَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "جا",
+          "soundChar": "جَا",
+          "soundLabel": "جَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "جَارَة. جا. جا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "جَارَة - جَا"
+        },
+        {
+          "w": "جِيل",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "جِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "جي",
+          "soundChar": "جِي",
+          "soundLabel": "جِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "جِيل. جي. جي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "جِيل - جِي"
+        },
+        {
+          "w": "عَجُوز",
+          "c": "ج",
+          "cPos": "ج",
+          "t": "جُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "جو",
+          "soundChar": "جُو",
+          "soundLabel": "جُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "جُوز. جو. جو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "جُوز - جُو"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "harf": "ك",
+      "name": "الْكَافُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "كِتَاب",
+          "c": "ك",
+          "cPos": "كـ",
+          "t": "ك - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَكْتَب",
+          "c": "ك",
+          "cPos": "ـكـ",
+          "t": "ك - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "سَمَك",
+          "c": "ك",
+          "cPos": "ـك",
+          "t": "ك - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "ذَاك",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "ك - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "كَلْب",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "كَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "كَ",
+          "soundChar": "كَ",
+          "soundLabel": "كَ - فَتْحَةٌ",
+          "speakText": "كَلْب. كَ. كَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "كَلْب - كَـ"
+        },
+        {
+          "w": "كُتُب",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "كُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "كُ",
+          "soundChar": "كُ",
+          "soundLabel": "كُ - ضَمَّةٌ",
+          "speakText": "كُتُب. كُ. كُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "كُتُب - كُـ"
+        },
+        {
+          "w": "كِرَاء",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "كِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "كِ",
+          "soundChar": "كِ",
+          "soundLabel": "كِ - كَسْرَةٌ",
+          "speakText": "كِيس. كِ. كِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "كِيس - كِـ"
+        },
+        {
+          "w": "كَاتِب",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "كَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "كا",
+          "soundChar": "كَا",
+          "soundLabel": "كَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "كَاتِب. كا. كا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "كَاتِب - كَا"
+        },
+        {
+          "w": "مِسْكِين",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "كِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "كي",
+          "soundChar": "كِي",
+          "soundLabel": "كِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "كِيلُو. كي. كي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "كِيلُو - كِي"
+        },
+        {
+          "w": "كُوب",
+          "c": "ك",
+          "cPos": "ك",
+          "t": "كُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "كو",
+          "soundChar": "كُو",
+          "soundLabel": "كُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "كُوب. كو. كو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "كُوب - كُو"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "harf": "ف",
+      "name": "الْفَاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "فَرَاشَة",
+          "c": "ف",
+          "cPos": "فـ",
+          "t": "ف - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "دَفْتَر",
+          "c": "ف",
+          "cPos": "ـفـ",
+          "t": "ف - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَفْرَاح",
+          "c": "ف",
+          "cPos": "ـفـ",
+          "t": "ف - وَسَطُ الْكَلِمَةِ مُنْفَصِل (إِضَافِي)",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "صَيْف",
+          "c": "ف",
+          "cPos": "ـف",
+          "t": "ف - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "خَرُوف",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "ف - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "فَرَس",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "فَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "فَ",
+          "soundChar": "فَ",
+          "soundLabel": "فَ - فَتْحَةٌ",
+          "speakText": "فَرَس. فَ. فَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "فَرَس - فَـ"
+        },
+        {
+          "w": "فُسْتَان",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "فُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "فُ",
+          "soundChar": "فُ",
+          "soundLabel": "فُ - ضَمَّةٌ",
+          "speakText": "فُسْتَان. فُ. فُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "فُسْتَان - فُـ"
+        },
+        {
+          "w": "فِرَاس",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "فِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "فِ",
+          "soundChar": "فِ",
+          "soundLabel": "فِ - كَسْرَةٌ",
+          "speakText": "فِيل. فِ. فِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "فِيل - فِـ"
+        },
+        {
+          "w": "فَاكِهَة",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "فَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "فا",
+          "soundChar": "فَا",
+          "soundLabel": "فَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "فَاكِهَة. فا. فا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "فَاكِهَة - فَا"
+        },
+        {
+          "w": "فِيل",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "فِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "في",
+          "soundChar": "فِي",
+          "soundLabel": "فِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "فِيل. في. في فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "فِيل - فِي"
+        },
+        {
+          "w": "فُول",
+          "c": "ف",
+          "cPos": "ف",
+          "t": "فُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "فو",
+          "soundChar": "فُو",
+          "soundLabel": "فُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "فُول. فو. فو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "فُول - فُو"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "harf": "ح",
+      "name": "الْحَاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "حِمَار",
+          "c": "ح",
+          "cPos": "حـ",
+          "t": "ح - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "صَاحِب",
+          "c": "ح",
+          "cPos": "ـحـ",
+          "t": "ح - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "سُحُب",
+          "c": "ح",
+          "cPos": "ـحـ",
+          "t": "ح - وَسَطُ الْكَلِمَةِ مُتَّصِل (إِضَافِي)",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "صُبْح",
+          "c": "ح",
+          "cPos": "ـح",
+          "t": "ح - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مِفْتَاح",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "ح - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "حَجَر",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "حَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "حَ",
+          "soundChar": "حَ",
+          "soundLabel": "حَ - فَتْحَةٌ",
+          "speakText": "حَجَر. حَ. حَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "حَجَر - حَـ"
+        },
+        {
+          "w": "حُجْرَة",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "حُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "حُ",
+          "soundChar": "حُ",
+          "soundLabel": "حُ - ضَمَّةٌ",
+          "speakText": "حُجْرَة. حُ. حُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "حُجْرَة - حُـ"
+        },
+        {
+          "w": "حِذَاء",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "حِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "حِ",
+          "soundChar": "حِ",
+          "soundLabel": "حِ - كَسْرَةٌ",
+          "speakText": "حِذَاء. حِ. حِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "حِذَاء - حِـ"
+        },
+        {
+          "w": "حَارِس",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "حَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "حا",
+          "soundChar": "حَا",
+          "soundLabel": "حَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "حَارِس. حا. حا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "حَارِس - حَا"
+        },
+        {
+          "w": "حِيتَان",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "حِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "حي",
+          "soundChar": "حِي",
+          "soundLabel": "حِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "حِيتَان. حي. حي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "حِيتَان - حِي"
+        },
+        {
+          "w": "حُوت",
+          "c": "ح",
+          "cPos": "ح",
+          "t": "حُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "حو",
+          "soundChar": "حُو",
+          "soundLabel": "حُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "حُوت. حو. حو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "حُوت - حُو"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "harf": "ص",
+      "name": "الصَّادُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "صَابُون",
+          "c": "ص",
+          "cPos": "صـ",
+          "t": "ص - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عُصْفُور",
+          "c": "ص",
+          "cPos": "ـصـ",
+          "t": "ص - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "قَمِيص",
+          "c": "ص",
+          "cPos": "ـص",
+          "t": "ص - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "رَصَاص",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "ص - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "صَخْرَة",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "صَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "صَ",
+          "soundChar": "صَ",
+          "soundLabel": "صَ - فَتْحَةٌ",
+          "speakText": "صَخْرَة. صَ. صَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "صَخْرَة - صَـ"
+        },
+        {
+          "w": "صُنْدُق",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "صُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "صُ",
+          "soundChar": "صُ",
+          "soundLabel": "صُ - ضَمَّةٌ",
+          "speakText": "صُنْدُق. صُ. صُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "صُنْدُق - صُـ"
+        },
+        {
+          "w": "صِنَاعَة",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "صِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "صِ",
+          "soundChar": "صِ",
+          "soundLabel": "صِ - كَسْرَةٌ",
+          "speakText": "صِيَاد. صِ. صِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "صِيَاد - صِـ"
+        },
+        {
+          "w": "صَاحِب",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "صَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "صا",
+          "soundChar": "صَا",
+          "soundLabel": "صَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "صَاحِب. صا. صا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "صَاحِب - صَا"
+        },
+        {
+          "w": "صِيَاد",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "صِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "صي",
+          "soundChar": "صِي",
+          "soundLabel": "صِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "صِيَاد. صي. صي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "صِيَاد - صِي"
+        },
+        {
+          "w": "صُوف",
+          "c": "ص",
+          "cPos": "ص",
+          "t": "صُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "صو",
+          "soundChar": "صُو",
+          "soundLabel": "صُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "صُوف. صو. صو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "صُوف - صُو"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "harf": "ز",
+      "name": "الزَّايُ",
+      "connects": false,
+      "stages": [
+        {
+          "w": "زَهْرَة",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "ز - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مِيزَان",
+          "c": "ز",
+          "cPos": "ـز",
+          "t": "ز - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَرُز",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "ز - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "زَيْتُون",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "زَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "زَ",
+          "soundChar": "زَ",
+          "soundLabel": "زَ - فَتْحَةٌ",
+          "speakText": "زَيْتُون. زَ. زَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "زَيْتُون - زَـ"
+        },
+        {
+          "w": "زُجَاج",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "زُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "زُ",
+          "soundChar": "زُ",
+          "soundLabel": "زُ - ضَمَّةٌ",
+          "speakText": "زُجَاج. زُ. زُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "زُجَاج - زُـ"
+        },
+        {
+          "w": "زِرَاعَة",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "زِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "زِ",
+          "soundChar": "زِ",
+          "soundLabel": "زِ - كَسْرَةٌ",
+          "speakText": "زِرَاعَة. زِ. زِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "زِرَاعَة - زِـ"
+        },
+        {
+          "w": "زَاوِيَة",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "زَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "زا",
+          "soundChar": "زَا",
+          "soundLabel": "زَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "زَاوِيَة. زا. زا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "زَاوِيَة - زَا"
+        },
+        {
+          "w": "عَزِيز",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "زِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "زي",
+          "soundChar": "زِي",
+          "soundLabel": "زِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "زِيتُون. زي. زي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "زِيتُون - زِي"
+        },
+        {
+          "w": "نُزُول",
+          "c": "ز",
+          "cPos": "ز",
+          "t": "زُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "زو",
+          "soundChar": "زُو",
+          "soundLabel": "زُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "زُور. زو. زو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "زُور - زُو"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "harf": "ش",
+      "name": "الشِّينُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "شَمْس",
+          "c": "ش",
+          "cPos": "شـ",
+          "t": "ش - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بِشَارَة",
+          "c": "ش",
+          "cPos": "ـشـ",
+          "t": "ش - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "جَيْش",
+          "c": "ش",
+          "cPos": "ـش",
+          "t": "ش - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَقَّاش",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "ش - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "شَجَرَة",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "شَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "شَ",
+          "soundChar": "شَ",
+          "soundLabel": "شَ - فَتْحَةٌ",
+          "speakText": "شَجَرَة. شَ. شَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "شَجَرَة - شَـ"
+        },
+        {
+          "w": "شُبَّاك",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "شُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "شُ",
+          "soundChar": "شُ",
+          "soundLabel": "شُ - ضَمَّةٌ",
+          "speakText": "شُبَّاك. شُ. شُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "شُبَّاك - شُـ"
+        },
+        {
+          "w": "شِتَاء",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "شِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "شِ",
+          "soundChar": "شِ",
+          "soundLabel": "شِ - كَسْرَةٌ",
+          "speakText": "شِتَاء. شِ. شِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "شِتَاء - شِـ"
+        },
+        {
+          "w": "شَارِع",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "شَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "شا",
+          "soundChar": "شَا",
+          "soundLabel": "شَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "شَارِع. شا. شا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "شَارِع - شَا"
+        },
+        {
+          "w": "شِيح",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "شِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "شي",
+          "soundChar": "شِي",
+          "soundLabel": "شِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "شِيح. شي. شي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "شِيح - شِي"
+        },
+        {
+          "w": "عَاشُورَاء",
+          "c": "ش",
+          "cPos": "ش",
+          "t": "شُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "شو",
+          "soundChar": "شُو",
+          "soundLabel": "شُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "شُور. شو. شو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "شُور - شُو"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "harf": "ع",
+      "name": "الْعَيْنُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "عَسَل",
+          "c": "ع",
+          "cPos": "عـ",
+          "t": "ع - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَعْلَم",
+          "c": "ع",
+          "cPos": "ـعـ",
+          "t": "ع - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "رَبِيع",
+          "c": "ع",
+          "cPos": "ـع",
+          "t": "ع - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "صِرَاع",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "ع - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "عَسَل",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "عَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "عَ",
+          "soundChar": "عَ",
+          "soundLabel": "عَ - فَتْحَةٌ",
+          "speakText": "عَسَل. عَ. عَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عَسَل - عَـ"
+        },
+        {
+          "w": "عُصْفُور",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "عُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "عُ",
+          "soundChar": "عُ",
+          "soundLabel": "عُ - ضَمَّةٌ",
+          "speakText": "عُصْفُور. عُ. عُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عُصْفُور - عُـ"
+        },
+        {
+          "w": "عِنَب",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "عِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "عِ",
+          "soundChar": "عِ",
+          "soundLabel": "عِ - كَسْرَةٌ",
+          "speakText": "عِنَب. عِ. عِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عِنَب - عِـ"
+        },
+        {
+          "w": "عَالِم",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "عَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "عا",
+          "soundChar": "عَا",
+          "soundLabel": "عَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "عَالِم. عا. عا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عَالِم - عَا"
+        },
+        {
+          "w": "عِيد",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "عِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "عي",
+          "soundChar": "عِي",
+          "soundLabel": "عِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "عِيد. عي. عي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عِيد - عِي"
+        },
+        {
+          "w": "عُود",
+          "c": "ع",
+          "cPos": "ع",
+          "t": "عُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "عو",
+          "soundChar": "عُو",
+          "soundLabel": "عُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "عُود. عو. عو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "عُود - عُو"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "harf": "خ",
+      "name": "الْخَاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "خَرُوف",
+          "c": "خ",
+          "cPos": "خـ",
+          "t": "خ - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَخْبَز",
+          "c": "خ",
+          "cPos": "ـخـ",
+          "t": "خ - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَطْبَخ",
+          "c": "خ",
+          "cPos": "ـخ",
+          "t": "خ - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَخٌ",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خ - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "خَرُوف",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "خَ",
+          "soundChar": "خَ",
+          "soundLabel": "خَ - فَتْحَةٌ",
+          "speakText": "خَرُوف. خَ. خَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "خَرُوف - خَـ"
+        },
+        {
+          "w": "خُبْز",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "خُ",
+          "soundChar": "خُ",
+          "soundLabel": "خُ - ضَمَّةٌ",
+          "speakText": "خُبْز. خُ. خُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "خُبْز - خُـ"
+        },
+        {
+          "w": "خِيَار",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "خِ",
+          "soundChar": "خِ",
+          "soundLabel": "خِ - كَسْرَةٌ",
+          "speakText": "خِيَار. خِ. خِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "خِيَار - خِـ"
+        },
+        {
+          "w": "خَاتَم",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "خا",
+          "soundChar": "خَا",
+          "soundLabel": "خَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "خَاتَم. خا. خا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "خَاتَم - خَا"
+        },
+        {
+          "w": "نَخِيل",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "خي",
+          "soundChar": "خِي",
+          "soundLabel": "خِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "خِيَار. خي. خي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "خِيَار - خِي"
+        },
+        {
+          "w": "فَخُور",
+          "c": "خ",
+          "cPos": "خ",
+          "t": "خُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "خو",
+          "soundChar": "خُو",
+          "soundLabel": "خُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "خُوخ. خو. خو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "خُوخ - خُو"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "harf": "ط",
+      "name": "الطَّاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "طَاوِلَة",
+          "c": "ط",
+          "cPos": "طـ",
+          "t": "ط - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بُطَاقَة",
+          "c": "ط",
+          "cPos": "ـطـ",
+          "t": "ط - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "خَيْط",
+          "c": "ط",
+          "cPos": "ـط",
+          "t": "ط - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَسَاط",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "ط - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "طَبِيب",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "طَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "طَ",
+          "soundChar": "طَ",
+          "soundLabel": "طَ - فَتْحَةٌ",
+          "speakText": "طَبِيب. طَ. طَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "طَبِيب - طَـ"
+        },
+        {
+          "w": "طُرُق",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "طُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "طُ",
+          "soundChar": "طُ",
+          "soundLabel": "طُ - ضَمَّةٌ",
+          "speakText": "طُفَيْل. طُ. طُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "طُفَيْل - طُـ"
+        },
+        {
+          "w": "طِفْل",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "طِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "طِ",
+          "soundChar": "طِ",
+          "soundLabel": "طِ - كَسْرَةٌ",
+          "speakText": "طِفْل. طِ. طِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "طِفْل - طِـ"
+        },
+        {
+          "w": "طَائِرَة",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "طَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "طا",
+          "soundChar": "طَا",
+          "soundLabel": "طَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "طَائِرَة. طا. طا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "طَائِرَة - طَا"
+        },
+        {
+          "w": "طِين",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "طِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "طي",
+          "soundChar": "طِي",
+          "soundLabel": "طِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "طِين. طي. طي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "طِين - طِي"
+        },
+        {
+          "w": "عُطُور",
+          "c": "ط",
+          "cPos": "ط",
+          "t": "طُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "طو",
+          "soundChar": "طُو",
+          "soundLabel": "طُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "طُور. طو. طو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "طُور - طُو"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "harf": "ذ",
+      "name": "الذَّالُ",
+      "connects": false,
+      "stages": [
+        {
+          "w": "ذِئْب",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذ - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "تِلْمِيذ",
+          "c": "ذ",
+          "cPos": "ـذ",
+          "t": "ذ - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أُسْتَاذ",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذ - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "ذَهَب",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ذَ",
+          "soundChar": "ذَ",
+          "soundLabel": "ذَ - فَتْحَةٌ",
+          "speakText": "ذَهَب. ذَ. ذَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ذَهَب - ذَـ"
+        },
+        {
+          "w": "ذُرَة",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ذُ",
+          "soundChar": "ذُ",
+          "soundLabel": "ذُ - ضَمَّةٌ",
+          "speakText": "ذُرَة. ذُ. ذُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ذُرَة - ذُـ"
+        },
+        {
+          "w": "ذِرَاع",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ذِ",
+          "soundChar": "ذِ",
+          "soundLabel": "ذِ - كَسْرَةٌ",
+          "speakText": "ذِرَاع. ذِ. ذِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ذِرَاع - ذِـ"
+        },
+        {
+          "w": "ذَاكِرَة",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "ذا",
+          "soundChar": "ذَا",
+          "soundLabel": "ذَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "ذَاكِرَة. ذا. ذا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ذَاكِرَة - ذَا"
+        },
+        {
+          "w": "مُذِيع",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "ذي",
+          "soundChar": "ذِي",
+          "soundLabel": "ذِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "ذِيل. ذي. ذي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ذِيل - ذِي"
+        },
+        {
+          "w": "بُذُور",
+          "c": "ذ",
+          "cPos": "ذ",
+          "t": "ذُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "ذو",
+          "soundChar": "ذُو",
+          "soundLabel": "ذُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "ذُود. ذو. ذو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ذُود - ذُو"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "harf": "ظ",
+      "name": "الظَّاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "ظَرْف",
+          "c": "ظ",
+          "cPos": "ظـ",
+          "t": "ظ - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَظْلُوم",
+          "c": "ظ",
+          "cPos": "ـظـ",
+          "t": "ظ - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "لَفْظ",
+          "c": "ظ",
+          "cPos": "ـظ",
+          "t": "ظ - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَحْفُوظ",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظ - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "ظَبْي",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ظَ",
+          "soundChar": "ظَ",
+          "soundLabel": "ظَ - فَتْحَةٌ",
+          "speakText": "ظَبْي. ظَ. ظَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ظَبْي - ظَـ"
+        },
+        {
+          "w": "ظُلْمَة",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ظُ",
+          "soundChar": "ظُ",
+          "soundLabel": "ظُ - ضَمَّةٌ",
+          "speakText": "ظُلْمَة. ظُ. ظُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ظُلْمَة - ظُـ"
+        },
+        {
+          "w": "ظِلّ",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ظِ",
+          "soundChar": "ظِ",
+          "soundLabel": "ظِ - كَسْرَةٌ",
+          "speakText": "ظِلّ. ظِ. ظِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ظِلّ - ظِـ"
+        },
+        {
+          "w": "ظَاهِر",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "ظا",
+          "soundChar": "ظَا",
+          "soundLabel": "ظَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "ظَاهِر. ظا. ظا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ظَاهِر - ظَا"
+        },
+        {
+          "w": "عَظِيم",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "ظي",
+          "soundChar": "ظِي",
+          "soundLabel": "ظِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "ظِيل. ظي. ظي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ظِيل - ظِي"
+        },
+        {
+          "w": "مَحْظُور",
+          "c": "ظ",
+          "cPos": "ظ",
+          "t": "ظُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "ظو",
+          "soundChar": "ظُو",
+          "soundLabel": "ظُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "ظُهُور. ظو. ظو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ظُهُور - ظُو"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "harf": "غ",
+      "name": "الْغَيْنُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "غُرَاب",
+          "c": "غ",
+          "cPos": "غـ",
+          "t": "غ - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَغْلَة",
+          "c": "غ",
+          "cPos": "ـغـ",
+          "t": "غ - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَوَابِغ",
+          "c": "غ",
+          "cPos": "ـغ",
+          "t": "غ - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "فَرَاغ",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غ - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "غَنَم",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "غَ",
+          "soundChar": "غَ",
+          "soundLabel": "غَ - فَتْحَةٌ",
+          "speakText": "غَنَم. غَ. غَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "غَنَم - غَـ"
+        },
+        {
+          "w": "غُرْفَة",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "غُ",
+          "soundChar": "غُ",
+          "soundLabel": "غُ - ضَمَّةٌ",
+          "speakText": "غُرْفَة. غُ. غُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "غُرْفَة - غُـ"
+        },
+        {
+          "w": "غِطَاء",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "غِ",
+          "soundChar": "غِ",
+          "soundLabel": "غِ - كَسْرَةٌ",
+          "speakText": "غِطَاء. غِ. غِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "غِطَاء - غِـ"
+        },
+        {
+          "w": "غَابَة",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "غا",
+          "soundChar": "غَا",
+          "soundLabel": "غَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "غَابَة. غا. غا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "غَابَة - غَا"
+        },
+        {
+          "w": "رَغِيف",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "غي",
+          "soundChar": "غِي",
+          "soundLabel": "غِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "غِيل. غي. غي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "غِيل - غِي"
+        },
+        {
+          "w": "غُول",
+          "c": "غ",
+          "cPos": "غ",
+          "t": "غُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "غو",
+          "soundChar": "غُو",
+          "soundLabel": "غُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "غُول. غو. غو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "غُول - غُو"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "harf": "ه",
+      "name": "الْهَاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "هِلَال",
+          "c": "ه",
+          "cPos": "هـ",
+          "t": "ه - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "نَهَار",
+          "c": "ه",
+          "cPos": "ـهـ",
+          "t": "ه - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "وَجْه",
+          "c": "ه",
+          "cPos": "ـه",
+          "t": "ه - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "وُجُوه",
+          "c": "ه",
+          "cPos": "ة",
+          "t": "ه - آخِرُ الْكَلِمَةِ (تَاءٌ مَرْبُوطَة)",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "هَوَاء",
+          "c": "ه",
+          "cPos": "ه",
+          "t": "هَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "هَ",
+          "soundChar": "هَ",
+          "soundLabel": "هَ - فَتْحَةٌ",
+          "speakText": "هَوَاء. هَ. هَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "هَوَاء - هَـ"
+        },
+        {
+          "w": "هُدُوء",
+          "c": "ه",
+          "cPos": "ه",
+          "t": "هُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "هُ",
+          "soundChar": "هُ",
+          "soundLabel": "هُ - ضَمَّةٌ",
+          "speakText": "هُدُوء. هُ. هُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "هُدُوء - هُـ"
+        },
+        {
+          "w": "هِرَّة",
+          "c": "ه",
+          "cPos": "ه",
+          "t": "هِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "هِ",
+          "soundChar": "هِ",
+          "soundLabel": "هِ - كَسْرَةٌ",
+          "speakText": "هِرَّة. هِ. هِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "هِرَّة - هِـ"
+        },
+        {
+          "w": "هَاتِف",
+          "c": "ه",
+          "cPos": "ه",
+          "t": "هَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "ها",
+          "soundChar": "هَا",
+          "soundLabel": "هَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "هَاتِف. ها. ها فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "هَاتِف - هَا"
+        },
+        {
+          "w": "رَهِيب",
+          "c": "ه",
+          "cPos": "ه",
+          "t": "هِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "هي",
+          "soundChar": "هِي",
+          "soundLabel": "هِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "هِيكَل. هي. هي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "هِيكَل - هِي"
+        },
+        {
+          "w": "زُهُور",
+          "c": "ه",
+          "cPos": "ه",
+          "t": "هُو - مَدٌّ بِالْوَاوِ",
+          "p": "middle",
+          "kind": "long_w",
+          "sound": "هو",
+          "soundChar": "هُو",
+          "soundLabel": "هُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "هُدْهُد. هو. هو فِي وَسَطِ الْكَلِمَةِ",
+          "speakLabel": "هُدْهُد - ـهُو"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "harf": "ي",
+      "name": "الْيَاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "يَد",
+          "c": "ي",
+          "cPos": "يـ",
+          "t": "ي - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَيْت",
+          "c": "ي",
+          "cPos": "ـيـ",
+          "t": "ي - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "كُرْسِي",
+          "c": "ي",
+          "cPos": "ـي",
+          "t": "ي - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "رَأْي",
+          "c": "ي",
+          "cPos": "ي",
+          "t": "ي - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "يَمَام",
+          "c": "ي",
+          "cPos": "ي",
+          "t": "يَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "يَ",
+          "soundChar": "يَ",
+          "soundLabel": "يَ - فَتْحَةٌ",
+          "speakText": "يَمَام. يَ. يَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "يَمَام - يَـ"
+        },
+        {
+          "w": "يُسْر",
+          "c": "ي",
+          "cPos": "ي",
+          "t": "يُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "يُ",
+          "soundChar": "يُ",
+          "soundLabel": "يُ - ضَمَّةٌ",
+          "speakText": "يُسْر. يُ. يُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "يُسْر - يُـ"
+        },
+        {
+          "w": "يَاسَمِين",
+          "c": "ي",
+          "cPos": "ي",
+          "t": "يَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "يا",
+          "soundChar": "يَا",
+          "soundLabel": "يَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "يَاسَمِين. يا. يا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "يَاسَمِين - يَا"
+        },
+        {
+          "w": "يُوسُف",
+          "c": "ي",
+          "cPos": "ي",
+          "t": "يُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "يو",
+          "soundChar": "يُو",
+          "soundLabel": "يُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "يُوسُف. يو. يو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "يُوسُف - يُو"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "harf": "ث",
+      "name": "الثَّاءُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "ثَعْلَب",
+          "c": "ث",
+          "cPos": "ثـ",
+          "t": "ث - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "غُثَاء",
+          "c": "ث",
+          "cPos": "ـثـ",
+          "t": "ث - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَحَث",
+          "c": "ث",
+          "cPos": "ـث",
+          "t": "ث - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَبْحَاث",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ث - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "ثَمَرَة",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ثَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ثَ",
+          "soundChar": "ثَ",
+          "soundLabel": "ثَ - فَتْحَةٌ",
+          "speakText": "ثَمَرَة. ثَ. ثَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ثَمَرَة - ثَـ"
+        },
+        {
+          "w": "ثُلُوج",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ثُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ثُ",
+          "soundChar": "ثُ",
+          "soundLabel": "ثُ - ضَمَّةٌ",
+          "speakText": "ثُلْج. ثُ. ثُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ثُلْج - ثُـ"
+        },
+        {
+          "w": "ثِيَاب",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ثِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ثِ",
+          "soundChar": "ثِ",
+          "soundLabel": "ثِ - كَسْرَةٌ",
+          "speakText": "ثِيَاب. ثِ. ثِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ثِيَاب - ثِـ"
+        },
+        {
+          "w": "ثَائِر",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ثَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "ثا",
+          "soundChar": "ثَا",
+          "soundLabel": "ثَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "ثَائِر. ثا. ثا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ثَائِر - ثَا"
+        },
+        {
+          "w": "كَثِير",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ثِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "ثي",
+          "soundChar": "ثِي",
+          "soundLabel": "ثِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "ثِيَاب. ثي. ثي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ثِيَاب - ثِي"
+        },
+        {
+          "w": "ثُوم",
+          "c": "ث",
+          "cPos": "ث",
+          "t": "ثُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "ثو",
+          "soundChar": "ثُو",
+          "soundLabel": "ثُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "ثُور. ثو. ثو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ثُور - ثُو"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "harf": "ض",
+      "name": "الضَّادُ",
+      "connects": true,
+      "stages": [
+        {
+          "w": "ضِرْس",
+          "c": "ض",
+          "cPos": "ضـ",
+          "t": "ض - أَوَّلُ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَضْمَار",
+          "c": "ض",
+          "cPos": "ـضـ",
+          "t": "ض - وَسَطُ الْكَلِمَةِ",
+          "p": "middle",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "بَيْض",
+          "c": "ض",
+          "cPos": "ـض",
+          "t": "ض - آخِرُ الْكَلِمَةِ مُتَّصِلاً",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَرَض",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ض - آخِرُ الْكَلِمَةِ مُنْفَصِلاً",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "ضَوْء",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ضَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ضَ",
+          "soundChar": "ضَ",
+          "soundLabel": "ضَ - فَتْحَةٌ",
+          "speakText": "ضَوْء. ضَ. ضَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ضَوْء - ضَـ"
+        },
+        {
+          "w": "ضُفْدَع",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ضُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ضُ",
+          "soundChar": "ضُ",
+          "soundLabel": "ضُ - ضَمَّةٌ",
+          "speakText": "ضُفْدَع. ضُ. ضُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ضُفْدَع - ضُـ"
+        },
+        {
+          "w": "ضِفَّة",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ضِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "ضِ",
+          "soundChar": "ضِ",
+          "soundLabel": "ضِ - كَسْرَةٌ",
+          "speakText": "ضِفَّة. ضِ. ضِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ضِفَّة - ضِـ"
+        },
+        {
+          "w": "ضَاحِكَة",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ضَا - مَدٌّ بِالْأَلِفِ",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "ضا",
+          "soundChar": "ضَا",
+          "soundLabel": "ضَا - مَدٌّ بِالْأَلِفِ",
+          "speakText": "ضَاحِكَة. ضا. ضا فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ضَاحِكَة - ضَا"
+        },
+        {
+          "w": "رَضِيع",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ضِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "ضي",
+          "soundChar": "ضِي",
+          "soundLabel": "ضِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "ضِيَاء. ضي. ضي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ضِيَاء - ضِي"
+        },
+        {
+          "w": "حُضُور",
+          "c": "ض",
+          "cPos": "ض",
+          "t": "ضُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "ضو",
+          "soundChar": "ضُو",
+          "soundLabel": "ضُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "ضُوء. ضو. ضو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "ضُوء - ضُو"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "harf": "أ",
+      "name": "الْهَمْزَةُ",
+      "connects": false,
+      "stages": [
+        {
+          "w": "أَسَد",
+          "c": "أَ",
+          "cPos": "أَ",
+          "t": "أَ - هَمْزَةٌ مَفْتُوحَة أَوَّلَ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "إِبْرَة",
+          "c": "إِ",
+          "cPos": "إِ",
+          "t": "إِ - هَمْزَةٌ مَكْسُورَة أَوَّلَ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أُمّ",
+          "c": "أُ",
+          "cPos": "أُ",
+          "t": "أُ - هَمْزَةٌ مَضْمُومَة أَوَّلَ الْكَلِمَةِ",
+          "p": "start",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "سَمَاء",
+          "c": "ء",
+          "cPos": "ء",
+          "t": "ء - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُنْفَصِلَة",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَرْنَب",
+          "c": "أ",
+          "cPos": "أ",
+          "t": "أَ - فَتْحَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "أَ",
+          "soundChar": "أَ",
+          "soundLabel": "أَ - فَتْحَةٌ",
+          "speakText": "أَرْنَب. أَ. أَ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "أَرْنَب - أَـ"
+        },
+        {
+          "w": "أُمّ",
+          "c": "أ",
+          "cPos": "أ",
+          "t": "أُ - ضَمَّةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "أُ",
+          "soundChar": "أُ",
+          "soundLabel": "أُ - ضَمَّةٌ",
+          "speakText": "أُمّ. أُ. أُ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "أُمّ - أُـ"
+        },
+        {
+          "w": "إِبْرَة",
+          "c": "أ",
+          "cPos": "أ",
+          "t": "إِ - كَسْرَةٌ",
+          "p": "start",
+          "kind": "short",
+          "sound": "إِ",
+          "soundChar": "إِ",
+          "soundLabel": "إِ - كَسْرَةٌ",
+          "speakText": "إِبْرَة. إِ. إِ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "إِبْرَة - إِـ"
+        },
+        {
+          "w": "آمَال",
+          "c": "أ",
+          "cPos": "أ",
+          "t": "آ - أَلِفٌ مَمْدُودَة",
+          "p": "start",
+          "kind": "long_a",
+          "sound": "آ",
+          "soundChar": "آ",
+          "soundLabel": "آ - أَلِفٌ مَمْدُودَة",
+          "speakText": "آمَال. آ. آ فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "آمَال - آ"
+        },
+        {
+          "w": "إِيمَان",
+          "c": "أ",
+          "cPos": "أ",
+          "t": "إِي - مَدٌّ بِالْيَاءِ",
+          "p": "start",
+          "kind": "long_y",
+          "sound": "إي",
+          "soundChar": "إِي",
+          "soundLabel": "إِي - مَدٌّ بِالْيَاءِ",
+          "speakText": "إِيمَان. إي. إي فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "إِيمَان - إِي"
+        },
+        {
+          "w": "أُورُوبَا",
+          "c": "أ",
+          "cPos": "أ",
+          "t": "أُو - مَدٌّ بِالْوَاوِ",
+          "p": "start",
+          "kind": "long_w",
+          "sound": "أو",
+          "soundChar": "أُو",
+          "soundLabel": "أُو - مَدٌّ بِالْوَاوِ",
+          "speakText": "أُورُوبَا. أو. أو فِي أَوَّلِ الْكَلِمَةِ",
+          "speakLabel": "أُورُوبَا - أُو"
+        },
+        {
+          "w": "رَائِد",
+          "c": "ء",
+          "cPos": "ـئـ",
+          "t": "ائِ - هَمْزَةٌ مُتَوَسِّطَة مَكْسُورَة",
+          "p": "middle",
+          "kind": "short",
+          "sound": "ئِ",
+          "soundChar": "ئِ",
+          "soundLabel": "ئِ - هَمْزَةٌ مُتَوَسِّطَة مَكْسُورَة",
+          "speakText": "رَائِد. ئِ. الْهَمْزَةُ فِي وَسَطِ الْكَلِمَةِ مَكْسُورَة",
+          "speakLabel": "رَائِد - ـئِـ"
+        },
+        {
+          "w": "رَؤُوف",
+          "c": "ء",
+          "cPos": "ـؤـ",
+          "t": "ؤُ - هَمْزَةٌ مُتَوَسِّطَة مَضْمُومَة",
+          "p": "middle",
+          "kind": "short",
+          "sound": "ؤُ",
+          "soundChar": "ؤُ",
+          "soundLabel": "ؤُ - هَمْزَةٌ مُتَوَسِّطَة مَضْمُومَة",
+          "speakText": "رَؤُوف. ؤُ. الْهَمْزَةُ فِي وَسَطِ الْكَلِمَةِ مَضْمُومَة",
+          "speakLabel": "رَؤُوف - ـؤُـ"
+        },
+        {
+          "w": "بِيئَة",
+          "c": "ء",
+          "cPos": "ئَ",
+          "t": "ئَ - هَمْزَةٌ مُتَوَسِّطَة مَفْتُوحَة",
+          "p": "middle",
+          "kind": "short",
+          "sound": "ئَ",
+          "soundChar": "ئَ",
+          "soundLabel": "ئَ - هَمْزَةٌ مُتَوَسِّطَة مَفْتُوحَة",
+          "speakText": "بِيئَة. ئَ. الْهَمْزَةُ فِي وَسَطِ الْكَلِمَةِ مَفْتُوحَة",
+          "speakLabel": "بِيئَة - ئَ"
+        },
+        {
+          "w": "سَأَل",
+          "c": "أ",
+          "cPos": "ـأَ",
+          "t": "أَ - هَمْزَةٌ مُتَوَسِّطَة عَلَى أَلِف",
+          "p": "middle",
+          "kind": "short",
+          "sound": "أَ",
+          "soundChar": "أَ",
+          "soundLabel": "أَ - هَمْزَةٌ مُتَوَسِّطَة عَلَى أَلِف",
+          "speakText": "سَأَل. أَ. الْهَمْزَةُ فِي وَسَطِ الْكَلِمَةِ عَلَى أَلِف",
+          "speakLabel": "سَأَل - ـأَ"
+        },
+        {
+          "w": "مَلَأ",
+          "c": "أ",
+          "cPos": "ـأ",
+          "t": "أ - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُتَّصِلَة عَلَى أَلِف",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "مَلِيء",
+          "c": "ء",
+          "cPos": "ـئ",
+          "t": "ئ - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُتَّصِلَة عَلَى يَاء",
+          "p": "end_c",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "جَرِيء",
+          "c": "ء",
+          "cPos": "ء",
+          "t": "ء - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُنْفَصِلَة بَعْدَ يَاء",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "هُدُوء",
+          "c": "ء",
+          "cPos": "ء",
+          "t": "ء - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُنْفَصِلَة بَعْدَ وَاو",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "جُزْء",
+          "c": "ء",
+          "cPos": "ء",
+          "t": "ء - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُنْفَصِلَة بَعْدَ سَاكِن",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        },
+        {
+          "w": "أَجْزَاء",
+          "c": "ء",
+          "cPos": "ء",
+          "t": "ء - هَمْزَةٌ آخِرَ الْكَلِمَةِ مُنْفَصِلَة بَعْدَ أَلِف",
+          "p": "end_d",
+          "kind": "pos",
+          "sound": null,
+          "soundChar": null,
+          "soundLabel": null,
+          "speakText": null,
+          "speakLabel": null
+        }
+      ]
+    }
+  ]
+};
+
+var NO_FWD = "\u0627\u0623\u0625\u0622\u062F\u0630\u0631\u0632\u0648\u0624\u0621";
+var currentHarfIdx = 0;
+var currentStage   = 0;
+
+/* ===== حفظ التقدم ===== */
+function saveP() { try { localStorage.setItem("tmm_h", currentHarfIdx); localStorage.setItem("tmm_s", currentStage); } catch(e){} }
+function getDone() { try { return JSON.parse(localStorage.getItem("tmm_done")) || []; } catch(e){ return []; } }
+function markDone(i) { var d=getDone(); if(d.indexOf(i)===-1){d.push(i);} try{localStorage.setItem("tmm_done",JSON.stringify(d));}catch(e){} }
+
+/* ===== شاشة الاختيار ===== */
+function buildSelect() {
+    var g = document.getElementById("huroof-grid");
+    g.innerHTML = "";
+    var done = getDone();
+    for (var i=0; i<DB.huroof.length; i++) {
+        var h = DB.huroof[i];
+        var isDone = done.indexOf(i) !== -1;
+        var b = document.createElement("button");
+        b.className = "harf-btn" + (isDone?" done":"");
+        b.innerHTML = "<div class=\"harf-btn-char\">"+h.harf+"</div>"+
+                      "<div class=\"harf-btn-name\">"+h.name+"</div>"+
+                      (isDone?"<div class=\"harf-btn-check\">&#10003;</div>":"");
+        b.setAttribute("data-i", i);
+        b.onclick = function(){ openLesson(parseInt(this.getAttribute("data-i"))); };
+        g.appendChild(b);
+    }
+}
+
+function openLesson(idx) {
+    currentHarfIdx = idx;
+    currentStage = 0;
+    try {
+        if (parseInt(localStorage.getItem("tmm_h"))===idx) {
+            var s = parseInt(localStorage.getItem("tmm_s"));
+            if (!isNaN(s)) currentStage = s;
+        }
+    } catch(e){}
+    document.getElementById("screen-select").style.display = "none";
+    document.getElementById("screen-lesson").style.display = "block";
+    renderLesson();
+}
+
+function goBack() {
+    document.getElementById("screen-lesson").style.display = "none";
+    document.getElementById("screen-select").style.display = "block";
+    buildSelect();
+}
+
+/* ===== رسم الدرس ===== */
+function renderLesson() {
+    var harf   = DB.huroof[currentHarfIdx];
+    var stages = harf.stages;
+    var d      = stages[currentStage];
+    var total  = stages.length;
+    var pct    = Math.round((currentStage+1)/total*100);
+    var isPos  = (d.kind === "pos");
+    var hasV   = !isPos;
+
+    document.getElementById("lesson-badge").innerText  = "دَرْسُ " + harf.name;
+    document.getElementById("stage-type").innerText    = d.t;
+    document.getElementById("step-label").innerText    = "الخطوة " + (currentStage+1) + " من " + total;
+    document.getElementById("step-pct").innerText      = pct + "%";
+    document.getElementById("progress-fill").style.width = pct + "%";
+    document.getElementById("char-display").innerText  = d.c;
+    document.getElementById("word-display").innerHTML  = d.w;
+
+    /* المربع الأيمن: الحرف المجرد */
+    document.getElementById("char-label").innerText = isPos ? "الْحَرْفُ الْمُجَرَّدُ" : "الْحَرْفُ الْمُجَرَّدُ";
+
+    /* المربع الأيسر */
+    var posBox   = document.getElementById("pos-box");
+    var posChar  = document.getElementById("pos-char");
+    var posLabel = document.getElementById("pos-label");
+    var arrow    = document.getElementById("arrow");
+
+    /* يظهر دائماً */
+    posBox.classList.add("show");
+    arrow.classList.add("show");
+
+    if (isPos) {
+        /* مرحلة الموضع: أخضر، يعرض cPos */
+        posChar.innerText  = d.cPos;
+        posChar.className  = "pos-char color-pos";
+        posLabel.innerText = posLabel_for(d.p);
+        posLabel.className = "pos-label color-pos";
+    } else {
+        /* مرحلة الحركات: تيل، يعرض soundChar */
+        posChar.innerText  = d.soundChar;
+        posChar.className  = "pos-char color-sound";
+        posLabel.innerText = d.soundLabel;
+        posLabel.className = "pos-label color-sound";
+    }
+
+    /* الأزرار */
+    unlock("btn1"); lock("btn2");
+    if (hasV) {
+        showBtn("btn3"); lock("btn3");
+        showBtn("btn4"); lock("btn4");
+        showBtn("btn5"); lock("btn5");
+    } else {
+        hideBtn("btn3"); hideBtn("btn4"); hideBtn("btn5");
+    }
+    setEnc("", false);
+    saveP();
+}
+
+function posLabel_for(p) {
+    if (p==="start")   return "أَوَّلُ الْكَلِمَةِ";
+    if (p==="middle")  return "وَسَطُ الْكَلِمَةِ";
+    if (p==="end_c")   return "آخِرُ الْكَلِمَةِ مُتَّصِل";
+    if (p==="end_d")   return "آخِرُ الْكَلِمَةِ مُنْفَصِل";
+    return p;
+}
+
+/* ===== خطوات التعلم ===== */
+function do1() {
+    speak(DB.huroof[currentHarfIdx].stages[currentStage].w, 0.55);
+    unlock("btn2");
+}
+
+function do2() {
+    var d = DB.huroof[currentHarfIdx].stages[currentStage];
+    document.getElementById("word-display").innerHTML = hlPlain(d.w, d.p, d.c);
+    speak("حرف " + DB.huroof[currentHarfIdx].name, 0.6);
+    setEnc("هَذَا هُوَ الْحَرْفُ فِي الْكَلِمَةِ", true);
+    if (d.kind !== "pos") unlock("btn3");
+}
+
+function do3() {
+    var d = DB.huroof[currentHarfIdx].stages[currentStage];
+    if (!d.sound) return;
+    speak(d.sound, 0.4);
+    setEnc("اسْتَمِعْ جَيِّداً... " + d.soundLabel, true);
+    unlock("btn4");
+}
+
+function do4() {
+    var d = DB.huroof[currentHarfIdx].stages[currentStage];
+    document.getElementById("word-display").innerHTML = hlSound(d.w, d.p, d.kind, d.c);
+    speak(d.sound, 0.4);
+    setEnc("هَذَا هُوَ " + d.soundLabel + " فِي الْكَلِمَةِ", true);
+    unlock("btn5");
+}
+
+function do5() {
+    var d = DB.huroof[currentHarfIdx].stages[currentStage];
+    speak(d.speakText, 0.45);
+    setEnc("&#127919; " + d.speakLabel + " - أَحْسَنْتَ!", true);
+}
+
+
+function stageGo(dir) {
+    var stages = DB.huroof[currentHarfIdx].stages;
+    currentStage = (currentStage + dir + stages.length) % stages.length;
+    if (dir > 0 && currentStage === 0) markDone(currentHarfIdx);
+    renderLesson();
+    if (dir > 0 && currentStage === 0) setEnc("&#127775; أَتْمَمْتَ الدَّرْسَ! أَحْسَنْتَ &#127775;", true);
+}
+
+/* ===== تقسيم الكلمة إلى وحدات ===== */
+function toUnits(str) {
+    var units=[]; var i=0;
+    while(i<str.length){
+        var u=str[i]; i++;
+        while(i<str.length){
+            var code=str.charCodeAt(i);
+            if((code>=0x064B&&code<=0x065F)||code===0x0670){u+=str[i];i++;}
+            else break;
+        }
+        units.push(u);
+    }
+    return units;
+}
+function fwd(u){ return NO_FWD.indexOf(u[0])===-1; }
+
+/* إيجاد موضع الحرف المستهدف في الوحدات */
+function findChar(units, harf) {
+    var h0 = harf.charCodeAt(0);
+    for (var i=0; i<units.length; i++) {
+        if (units[i].charCodeAt(0) === h0) return i;
+    }
+    return -1;
+}
+
+/* تمييز الحرف المجرد في الكلمة */
+function hlPlain(word, pos, harf) {
+    var T="\u0640"; var units=toUnits(word); var out="";
+    if (pos==="start") {
+        var arm=(units.length>1&&fwd(units[0]))?T:"";
+        out="<span class=\"hl\">"+units[0]+arm+"</span>";
+        for(var i=1;i<units.length;i++) out+=units[i];
+    } else if (pos==="end_c") {
+        for(var i=0;i<units.length-1;i++) out+=units[i];
+        out+="<span class=\"hl\">"+T+units[units.length-1]+"</span>";
+    } else if (pos==="end_d") {
+        for(var i=0;i<units.length-1;i++) out+=units[i];
+        out+="<span class=\"hl\">"+units[units.length-1]+"</span>";
+    } else {
+        /* middle */
+        var idx=findChar(units, harf);
+        if(idx>=0){
+            var ab=idx>0?T:""; var aa=(idx<units.length-1&&fwd(units[idx]))?T:"";
+            for(var i=0;i<idx;i++) out+=units[i];
+            out+="<span class=\"hl\">"+ab+units[idx]+aa+"</span>";
+            for(var i=idx+1;i<units.length;i++) out+=units[i];
+        } else out=word;
+    }
+    return out;
+}
+
+/* تمييز الحرف مع حركته */
+function hlSound(word, pos, kind, harf) {
+    var T="\u0640"; var units=toUnits(word); var out="";
+    var isLong = (kind==="long_a"||kind==="long_y"||kind==="long_w");
+    if (pos==="start") {
+        if(isLong&&units.length>1){
+            var arm=(units.length>2&&fwd(units[1]))?T:"";
+            out="<span class=\"hl-sound\">"+units[0]+units[1]+arm+"</span>";
+            for(var i=2;i<units.length;i++) out+=units[i];
+        } else {
+            var arm=(units.length>1&&fwd(units[0]))?T:"";
+            out="<span class=\"hl-sound\">"+units[0]+arm+"</span>";
+            for(var i=1;i<units.length;i++) out+=units[i];
+        }
+    } else if(pos==="end_c"||pos==="end_d"){
+        for(var i=0;i<units.length-1;i++) out+=units[i];
+        var pre = pos==="end_c" ? T : "";
+        out+=pre+"<span class=\"hl-sound\">"+units[units.length-1]+"</span>";
+    } else {
+        var idx=findChar(units,harf);
+        if(idx>=0){
+            var ab=idx>0?T:"";
+            for(var i=0;i<idx;i++) out+=units[i];
+            if(isLong&&idx+1<units.length){
+                var aa2=(idx+2<units.length&&fwd(units[idx+1]))?T:"";
+                out+="<span class=\"hl-sound\">"+ab+units[idx]+units[idx+1]+aa2+"</span>";
+                for(var i=idx+2;i<units.length;i++) out+=units[i];
+            } else {
+                var aa=(idx<units.length-1&&fwd(units[idx]))?T:"";
+                out+="<span class=\"hl-sound\">"+ab+units[idx]+aa+"</span>";
+                for(var i=idx+1;i<units.length;i++) out+=units[i];
+            }
+        } else out=word;
+    }
+    return out;
+}
+
+/* ===== مساعدات ===== */
+function speak(text,rate){
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    var u=new SpeechSynthesisUtterance(text);
+    u.lang="ar-SA"; u.rate=rate;
+    window.speechSynthesis.speak(u);
+}
+function lock(id){var e=document.getElementById(id);if(e){e.classList.add("btn-locked");e.classList.remove("btn-hidden");}}
+function unlock(id){var e=document.getElementById(id);if(e)e.classList.remove("btn-locked");}
+function showBtn(id){var e=document.getElementById(id);if(e)e.classList.remove("btn-hidden");}
+function hideBtn(id){var e=document.getElementById(id);if(e){e.classList.add("btn-hidden");e.classList.remove("btn-locked");}}
+function showEl(id,show){var e=document.getElementById(id);if(!e)return;if(show)e.classList.add("show");else e.classList.remove("show");}
+function setEnc(msg,show){var e=document.getElementById("encourage");e.innerHTML=msg;if(show)e.classList.add("show");else e.classList.remove("show");}
+
+buildSelect();
+</script>
+</body>
+</html>
